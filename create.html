@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<head>
+    <title>Voices77</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="count">
+<a href="index.html">
+<button class="Back">Back</button>
+</a>
+<h1>CreatePost</h1>
+    <center>
+        <input class="Nick" id="nick" placeholder=" Nickname"><br>
+        <input class="About" id="text" placeholder=" About"><br>
+        <a href="Meme.html">
+        <button class="Post" id="post"><p>Create Post</p></button>
+        </a>
+    </center>
+    </div>
+
+    <style>
+        body {
+            font-family: Geologica;
+        }
+
+        .post-item {
+            background-color: rgb(180, 180, 180);
+            width: 95%;
+            height: 20%;
+            margin-bottom: 10px; /* Add some space between posts */
+            padding: 10px; /* Add some padding inside the post */
+            border-radius: 5px; /* Rounded corners */
+        }
+        .About {
+            background-color: rgb(218, 218, 218);
+            border: none;
+            border-radius: 25px;
+            width: 80%;
+            height: 12vw;
+            margin-top: 3vw;
+
+        }
+        .Nick {
+            background-color: rgb(218, 218, 218);
+            border: none;
+            border-radius: 25px;
+            width: 80%;
+            height: 12vw;
+            margin-top: 10vw;
+        }
+        .Post {
+            background-color: rgb(121, 169, 214);
+            margin-top: 5vw;
+            border: none;
+            border-radius: 25px;
+            width: 80%;
+            height: 12vw;
+            color: white;
+        }
+        .Back {
+            background-color: white;
+            width: 20vw;
+            height: 10vw;
+            border: none;
+        }
+
+    </style>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTbrDxzVWtw1VKhivLZFmM7qptPmr9ATc",
+            authDomain: "memeforum-9cfc0.firebaseapp.com",
+            databaseURL: "https://memeforum-9cfc0-default-rtdb.firebaseio.com",
+            projectId: "memeforum-9cfc0",
+            storageBucket: "memeforum-9cfc0.firebasestorage.app",
+            messagingSenderId: "274871887330",
+            appId: "1:274871887330:web:80abe2bc798b2f5a61c5bb",
+            measurementId: "G-XJJQ9X8N09"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const PostButton = document.getElementById("post");
+        const nickInput = document.getElementById("nick");
+        const textInput = document.getElementById("text");
+        const postContainer = document.getElementById("post-container");
+
+        PostButton.addEventListener('click', () => {
+            const nick = nickInput.value;
+            const text = textInput.value;
+
+            if (nick && text) {
+                const newPostRef = ref(db, 'posts/' + Date.now()); // Unique key based on timestamp
+
+                set(newPostRef, {
+                    nick: nick,
+                    text: text
+                })
+                .then(() => {
+                    console.log("Data written successfully!");
+                    nickInput.value = ''; // Clear input fields after posting
+                    textInput.value = '';
+                })
+                .catch((error) => {
+                    console.error("Error writing data:", error);
+                });
+            } else {
+                alert("Please fill in all fields.");
+            }
+        });
+
+        const postsRef = ref(db, 'posts');
+        onValue(postsRef, (snapshot) => {
+            postContainer.innerHTML = ''; // Clear previous posts
+
+            snapshot.forEach(childSnapshot => {
+                const post = childSnapshot.val();
+                const postElement = document.createElement('div');
+                postElement.classList.add('post-item'); // Add the class to each post
+                postElement.innerHTML = `
+                    <b>${post.nick}:</b><br>${post.text}
+                `;
+                postContainer.appendChild(postElement);
+            });
+        });
+    </script>
+</body>
+</html>
