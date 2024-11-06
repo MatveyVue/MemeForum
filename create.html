@@ -11,24 +11,34 @@
 
     <div class="count">
 <a href="index.html">
-<button style="color: black" class="Back">Back</button>
+<button class="Back">Back</button>
 </a>
 <h1>CreatePost</h1>
     <center>
+    <div class="fon">
         <input class="Nick" id="nick" placeholder=" Nickname"><br>
         <input class="About" id="text" placeholder=" About"><br>
-        <a href="index.html">
+        <a href="Meme.html">
         <button class="Post" id="post"><p>Create Post</p></button>
         </a>
+    </div>
     </center>
     </div>
 
     <style>
         body {
-            background-color: white;
             font-family: Geologica;
+            touch-action: none;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            position: relative;
+            user-select: none;
+            width: 100vw;
+            height: 100vw;
         }
-
+        input {
+            font-size: 16px;
+        }
         .post-item {
             background-color: rgb(180, 180, 180);
             width: 95%;
@@ -68,7 +78,12 @@
             width: 20vw;
             height: 10vw;
             border: none;
-            color: Black;
+        }
+        .fon {
+            background-color: rgb(236, 236, 236);
+            width: 85vw;
+            height: 60vw;
+            border-radius: 25px;
         }
 
     </style>
