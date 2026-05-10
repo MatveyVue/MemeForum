@@ -1,0 +1,98 @@
+body {
+    font-family: Geologica;
+    background-color: rgb(24, 24, 24);
+    margin: 0;
+}
+
+.post-item {
+    background-color: rgb(16, 16, 16);
+    width: 90%;
+    height: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 15px;
+    color: white;
+}
+
+.profile-container {
+    background-color: rgb(30, 30, 30);
+    height: 250px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: fixed;
+    width: 100%;
+    margin-top: -22px;
+}
+
+.create-conatiner {
+    background-color: rgb(30, 30, 30);
+    width: 100%;
+    height: 70px;
+    bottom: 0;
+    position: fixed;
+}
+
+.about {
+    background-color: rgb(37, 37, 37);
+    border: 0.5px solid rgb(36, 36, 36);
+    width: 84%;
+    height: 40px;
+    border-radius: 20px;
+    color: white;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.create {
+    background-color: rgb(22, 123, 212);
+    float: right;
+    margin-top: -42px;
+    border: 0.5px solid rgb(21, 140, 244);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+}
+
+/* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ===== */
+#post-container {
+    padding-top: 270px;
+    padding-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5px;
+}
+
+.post-item b {
+    color: rgb(22, 123, 212);
+}
+
+.about:focus {
+    outline: none;
+    border: 0.5px solid rgb(22, 123, 212);
+}
+
+.about::placeholder {
+    color: rgb(100, 100, 100);
+}
+
+.create {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.create:hover {
+    opacity: 0.8;
+}
+
+.profile-container img {
+    border: 3px solid rgb(22, 123, 212);
+    object-fit: cover;
+}
+
+@media (max-width: 600px) {
+    .about { width: 82%; }
+    #post-container { padding-top: 260px; }
+}
