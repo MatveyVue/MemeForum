@@ -19,7 +19,6 @@ const db = getDatabase(app);
 let tgUser = null;
 let userPhotoUrl = '';
 let typingTimeout = null;
-let currentTypingUser = null;
 
 try {
     const webApp = window.Telegram.WebApp;
@@ -28,8 +27,15 @@ try {
     tgUser = webApp.initDataUnsafe?.user;
     
     if (tgUser) {
-        const initial = tgUser.first_name?.charAt(0) || 'W';
-        userPhotoUrl = `https://ui-avatars.com/api/?background=1e58d7&color=fff&size=100&name=${encodeURIComponent(initial)}&bold=true`;
+        // Получаем фото пользователя из Telegram
+        if (tgUser.photo_url) {
+            userPhotoUrl = tgUser.photo_url;
+        } else {
+            const firstName = tgUser.first_name || '';
+            const lastName = tgUser.last_name || '';
+            const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || firstName.charAt(0).toUpperCase() || '?';
+            userPhotoUrl = `https://ui-avatars.com/api/?background=1e58d7&color=fff&size=200&name=${encodeURIComponent(initials)}&bold=true&length=2`;
+        }
         
         const fullName = (tgUser.first_name || '') + (tgUser.last_name ? ' ' + tgUser.last_name : '');
         document.getElementById('fullName').innerText = fullName || 'Whsxg';
@@ -42,11 +48,14 @@ try {
     console.log('Not in Telegram');
 }
 
-// ===== ИНДИКАТОР ПЕЧАТИ =====
+// ===== ЭЛЕМЕНТЫ =====
 const textInput = document.getElementById("text");
 const typingIndicator = document.getElementById("typingIndicator");
+const postContainer = document.getElementById("post-container");
+const scrollToBottomBtn = document.getElementById("scrollToBottomBtn");
 const typingStatusRef = ref(db, 'typing/' + (tgUser?.id || 'guest'));
 
+// ===== ИНДИКАТОР ПЕЧАТИ =====
 function startTyping() {
     if (tgUser) {
         set(typingStatusRef, {
@@ -55,8 +64,6 @@ function startTyping() {
             avatar: userPhotoUrl,
             timestamp: Date.now()
         });
-        
-        // Автоматически отключаем при закрытии
         onDisconnect(typingStatusRef).set(null);
     }
 }
@@ -70,7 +77,6 @@ function stopTyping() {
 textInput.addEventListener('input', () => {
     if (textInput.value.length > 0) {
         startTyping();
-        
         if (typingTimeout) clearTimeout(typingTimeout);
         typingTimeout = setTimeout(() => {
             stopTyping();
@@ -87,7 +93,6 @@ onValue(allTypingRef, (snapshot) => {
     snapshot.forEach(childSnapshot => {
         const data = childSnapshot.val();
         if (data && data.isTyping && childSnapshot.key !== (tgUser?.id?.toString() || 'guest')) {
-            // Показываем только если сообщение напечатано в последние 3 секунды
             if (Date.now() - (data.timestamp || 0) < 3000) {
                 typingUsers.push(data);
             }
@@ -105,9 +110,30 @@ onValue(allTypingRef, (snapshot) => {
     }
 });
 
+// ===== ПРОКРУТКА =====
+function scrollToBottom() {
+    postContainer.scrollTop = postContainer.scrollHeight;
+}
+
+function isAtBottom() {
+    return postContainer.scrollHeight - postContainer.scrollTop - postContainer.clientHeight < 50;
+}
+
+// Показываем/скрываем кнопку скролла
+postContainer.addEventListener('scroll', () => {
+    if (isAtBottom()) {
+        scrollToBottomBtn.classList.add('hidden');
+    } else {
+        scrollToBottomBtn.classList.remove('hidden');
+    }
+});
+
+scrollToBottomBtn.addEventListener('click', () => {
+    scrollToBottom();
+});
+
 // ===== СОЗДАНИЕ ПОСТА =====
 const PostButton = document.getElementById("post");
-const postContainer = document.getElementById("post-container");
 
 PostButton.addEventListener('click', () => {
     const text = textInput.value.trim();
@@ -116,10 +142,10 @@ PostButton.addEventListener('click', () => {
     const avatar = userPhotoUrl || 'https://ui-avatars.com/api/?background=1e58d7&color=fff&size=100&name=W';
     
     if (text) {
-        // Останавливаем индикатор печати
         stopTyping();
         
-        const newPostRef = ref(db, 'posts/' + Date.now());
+        const timestamp = Date.now();
+        const newPostRef = ref(db, 'posts/' + timestamp);
         
         set(newPostRef, {
             nick: nick,
@@ -127,7 +153,7 @@ PostButton.addEventListener('click', () => {
             text: text,
             avatar: avatar,
             userId: tgUser?.id || null,
-            timestamp: Date.now()
+            timestamp: timestamp
         })
         .then(() => {
             textInput.value = '';
@@ -139,7 +165,7 @@ PostButton.addEventListener('click', () => {
     }
 });
 
-// ===== ФОРМАТИРОВАНИЕ ВРЕМЕНИ =====
+// ===== ФОРМАТИРОВАНИЕ =====
 function formatTime(timestamp) {
     const date = new Date(timestamp);
     const hours = date.getHours().toString().padStart(2, '0');
@@ -158,14 +184,18 @@ const postsRef = ref(db, 'posts');
 const postsQuery = query(postsRef, orderByChild('timestamp'));
 
 onValue(postsQuery, (snapshot) => {
-    postContainer.innerHTML = '';
+    const wasAtBottom = isAtBottom();
     
     const posts = [];
     snapshot.forEach(childSnapshot => {
         posts.push({ id: childSnapshot.key, ...childSnapshot.val() });
     });
     
+    // Сортируем по времени — старые сверху, новые снизу
     posts.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    
+    // Очищаем контейнер
+    postContainer.innerHTML = '';
     
     if (posts.length === 0) {
         postContainer.innerHTML = `
@@ -180,6 +210,7 @@ onValue(postsQuery, (snapshot) => {
         return;
     }
     
+    // Отображаем посты
     posts.forEach(post => {
         const postElement = document.createElement('div');
         postElement.classList.add('post-item');
@@ -204,7 +235,13 @@ onValue(postsQuery, (snapshot) => {
         postContainer.appendChild(postElement);
     });
     
-    setTimeout(() => {
-        postContainer.scrollTop = postContainer.scrollHeight;
-    }, 100);
+    // Скроллим вниз если было внизу или новое сообщение
+    if (wasAtBottom) {
+        scrollToBottom();
+    }
 });
+
+// При загрузке страницы скроллим вниз
+setTimeout(() => {
+    scrollToBottom();
+}, 500);
