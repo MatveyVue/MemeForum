@@ -1,19 +1,12 @@
 body {
-    font-family: Geologica;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background-color: rgb(24, 24, 24);
     margin: 0;
+    padding-bottom: 80px;
+    padding-top: 260px;
 }
 
-.post-item {
-    background-color: rgb(16, 16, 16);
-    width: 90%;
-    height: auto;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 15px;
-    color: white;
-}
-
+/* ===== ПРОФИЛЬ ===== */
 .profile-container {
     background-color: rgb(30, 30, 30);
     height: 250px;
@@ -22,69 +15,12 @@ body {
     position: fixed;
     width: 100%;
     margin-top: -22px;
-}
-
-.create-conatiner {
-    background-color: rgb(30, 30, 30);
-    width: 100%;
-    height: 70px;
-    bottom: 0;
-    position: fixed;
-}
-
-.about {
-    background-color: rgb(37, 37, 37);
-    border: 0.5px solid rgb(36, 36, 36);
-    width: 84%;
-    height: 40px;
-    border-radius: 20px;
-    color: white;
-    font-size: 16px;
-    margin-top: 10px;
-    margin-left: 5px;
-}
-
-.create {
-    background-color: rgb(22, 123, 212);
-    float: right;
-    margin-top: -42px;
-    border: 0.5px solid rgb(21, 140, 244);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    margin-right: 5px;
-}
-
-/* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ===== */
-#post-container {
-    padding-top: 270px;
-    padding-bottom: 80px;
+    top: 0;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5px;
-}
-
-.post-item b {
-    color: rgb(22, 123, 212);
-}
-
-.about:focus {
-    outline: none;
-    border: 0.5px solid rgb(22, 123, 212);
-}
-
-.about::placeholder {
-    color: rgb(100, 100, 100);
-}
-
-.create {
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.create:hover {
-    opacity: 0.8;
+    justify-content: center;
 }
 
 .profile-container img {
@@ -92,7 +28,242 @@ body {
     object-fit: cover;
 }
 
-@media (max-width: 600px) {
-    .about { width: 82%; }
-    #post-container { padding-top: 260px; }
+.profile-container h2 {
+    margin-top: 12px;
+    font-size: 22px;
+    font-weight: 600;
+    color: white;
+}
+
+.profile-container .username {
+    color: rgb(150, 150, 150);
+    font-size: 14px;
+    margin-top: -5px;
+}
+
+/* ===== СООБЩЕНИЯ ===== */
+#post-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px 12px;
+    padding-bottom: 20px;
+}
+
+/* Каждое сообщение */
+.post-item {
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Верхняя часть сообщения (имя + текст) */
+.post-top {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+/* Имя пользователя */
+.post-name {
+    color: rgb(22, 123, 212);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 2px;
+    margin-left: 35px;
+}
+
+/* Контейнер сообщения */
+.post-message-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+/* Облачко сообщения */
+.post-bubble {
+    background: #1e2a3a;
+    padding: 10px 14px;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    max-width: 80%;
+    word-wrap: break-word;
+    margin-left: 30px;
+}
+
+.post-text {
+    color: white;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* Время под сообщением */
+.post-time {
+    color: #6c6c70;
+    font-size: 10px;
+    margin-top: 4px;
+    margin-left: 32px;
+    letter-spacing: 0.3px;
+}
+
+/* Аватар снизу справа от сообщения */
+.post-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    float: left;
+    position: absolute;
+    margin-bottom: -5px;
+    margin-left: -4px;
+}
+
+/* ===== ИНДИКАТОР ПЕЧАТИ ===== */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(30, 30, 30, 0.9);
+    border-radius: 20px;
+    position: fixed;
+    bottom: 80px;
+    left: 12px;
+    z-index: 20;
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.typing-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.typing-text {
+    color: #8e8e93;
+    font-size: 13px;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}
+
+.typing-dots span {
+    width: 5px;
+    height: 5px;
+    background: #8e8e93;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ===== ПАНЕЛЬ ВВОДА ===== */
+.create-conatiner {
+    background-color: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    height: 70px;
+    bottom: 0;
+    position: fixed;
+    border-top: 0.5px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 10px;
+    z-index: 15;
+}
+
+.create-conatiner .bottom-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.about {
+    flex: 1;
+    background-color: rgb(37, 37, 37);
+    border: none;
+    height: 42px;
+    border-radius: 24px;
+    color: white;
+    font-size: 16px;
+    margin-top: 0;
+    margin-left: 0;
+    padding: 0 16px;
+    max-width: 280px;
+}
+
+.about:focus {
+    outline: none;
+    border: 1px solid rgb(22, 123, 212);
+}
+
+.about::placeholder {
+    color: #8e8e93;
+}
+
+.create {
+    background-color: rgb(22, 123, 212);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.create:active {
+    transform: scale(0.95);
+}
+
+.create p {
+    margin: 0;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #8e8e93;
+}
+
+.empty-state svg {
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+/* Скрытый элемент */
+.hidden {
+    display: none !important;
 }
