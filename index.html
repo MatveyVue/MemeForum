@@ -13,12 +13,20 @@
 </head>
 <body>
     <div class="profile-container" style="text-align: center;">
-        <img id="avatar" alt="avatar" src="https://github.com/MatveyVue/Profiles-Telegram/blob/main/Profile.PNG?raw=true" style="width: 100px; height: 100px; border-radius: 50px; margin-top: 20px;">
+        <img id="avatar" alt="avatar" src="" style="width: 100px; height: 100px; border-radius: 50px; margin-top: 20px;">
         <h2 id="fullName" style="color: white; margin-top: 5px;">Whsxg</h2>
         <p id="username" class="username" style="color: #888; margin-top: -5px; font-size: 14px;"></p>
     </div>
     
     <div id="post-container"></div>
+    
+    <!-- Кнопка прокрутки вниз -->
+    <button id="scrollToBottomBtn" class="scroll-bottom-btn hidden">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        <span class="new-messages-badge" id="newMessagesBadge">0</span>
+    </button>
     
     <!-- Индикатор печати -->
     <div id="typingIndicator" class="typing-indicator hidden">
@@ -32,7 +40,7 @@
     </div>
     
     <div class="create-conatiner">
-        <img id="bottomAvatar" class="bottom-avatar" src="https://github.com/MatveyVue/Profiles-Telegram/blob/main/Profile.PNG?raw=true" alt="avatar">
+        <img id="bottomAvatar" class="bottom-avatar" src="" alt="avatar">
         <input class="about" id="text" placeholder="Сообщение">
         <button class="create" id="post"><p>➤</p></button>
     </div>
