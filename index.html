@@ -3,26 +3,38 @@
 <head>
     <title>Stenka</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="script.js" type="module"></script>
-    <script src="create.js" type="module"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="profile-container" style="text-align: center;">
-        <img id="avatar" alt="avatar" src="" style="width: 100px; height: 100px; border-radius: 50px; margin-top: 20px; object-fit: cover;">
-        <h2 id="fullName" style="color: white; margin-top: 5px;"></h2>
-        <p id="username" style="color: #888; margin-top: -5px; font-size: 14px;"></p>
+        <img id="avatar" alt="avatar" src="https://github.com/MatveyVue/Profiles-Telegram/blob/main/Profile.PNG?raw=true" style="width: 100px; height: 100px; border-radius: 50px; margin-top: 20px;">
+        <h2 id="fullName" style="color: white; margin-top: 5px;">Whsxg</h2>
+        <p id="username" class="username" style="color: #888; margin-top: -5px; font-size: 14px;"></p>
     </div>
+    
+    <div id="post-container"></div>
+    
+    <!-- Индикатор печати -->
+    <div id="typingIndicator" class="typing-indicator hidden">
+        <img id="typingAvatar" class="typing-avatar" src="" alt="">
+        <span class="typing-text">печатает</span>
+        <div class="typing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
     <div class="create-conatiner">
-        <input class="about" id="text" placeholder=" About"><br>
-        <button class="create" id="post"><p>Post</p></button>
+        <img id="bottomAvatar" class="bottom-avatar" src="https://github.com/MatveyVue/Profiles-Telegram/blob/main/Profile.PNG?raw=true" alt="avatar">
+        <input class="about" id="text" placeholder="Сообщение">
+        <button class="create" id="post"><p>➤</p></button>
     </div>
-    <div style="margin-top: 5vw;" id="post-container"></div>
 </body>
 </html>
